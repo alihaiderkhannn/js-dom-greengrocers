@@ -69,9 +69,7 @@ function handleItemClick(storeItem) {
   }
   else {
     let cartitem = {
-      id: storeItem.id,
-      name: storeItem.name,
-      price: storeItem.price,
+      ...storeItem,
       quantity: 1
   
     }
@@ -87,11 +85,15 @@ function renderItems() {
   });
 }
 function renderCart() {
+  const total = document.querySelector(".total-number");
   //iterate through state.cart.map  and update the cart view
   state.cart.map((item) => {
-    let li = renderCartItem(item);
-    cartList.appendChild(li);
+    // let li = renderCartItem(item);
+    // console.log(item,li)
+    // cartList.appendChild(li);
+    renderCartItem(item)
   });
+  total.innerHTML = calculateTotal();
 }
 function renderCartItem(cartItem) {
   /*
@@ -128,10 +130,11 @@ function renderCartItem(cartItem) {
   <button class="quantity-btn add-btn center">+</button>` 
 
   const removebtn = item.querySelector(".remove-btn")
+  console.log(removebtn);
   const addbtn = item.querySelector(".add-btn")
   
   removebtn.addEventListener('click', () => {
-    if (x.quantity > 1) {
+    if (x.quantity > 0) {
       x.quantity--;
     } else {
       state.cart = state.cart.filter(cartItem => cartItem.id !== x.id)
@@ -149,8 +152,6 @@ function renderCartItem(cartItem) {
   list.appendChild(item)
   });
 
-  
- 
 }
 function renderItem(storeItem) {
   console.log(storeItem);
@@ -174,6 +175,17 @@ function renderItem(storeItem) {
 
   return li;
 }
+
+function calculateTotal() {
+  let total = 0;
+  state.cart.map((item) => {
+    console.log(item)
+    total += item.price * item.quantity
+  })
+  return total.toFixed(2)
+}
+
+
 
 renderItems();
 renderCart();
